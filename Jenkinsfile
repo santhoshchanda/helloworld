@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'dockerhub'
     dockerImage = ''
     ecrregistry= '420407463971.dkr.ecr.us-east-2.amazonaws.com/helloworld'
-    ecrregistryCredential= 'aj_user'
+    ecrregistryCredential= credentials('aj_user1')
   }
   agent any
   stages {
@@ -20,15 +20,15 @@ pipeline {
         }
       }
     }
-    stage('Deploy Image') {
-      steps{
+    /*stage('Deploy Image') {
+    steps{
          script {
-            docker.withRegistry( '', registryCredential ) {
+           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
           }
 	      }
       }
-    }
+    }*/
        stage('Deploy Image to ECR') {
       steps{
          script {
