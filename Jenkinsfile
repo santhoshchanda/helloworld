@@ -10,7 +10,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git 'git@github.com:santhoshchanda/helloworld.git'
+        git branch: 'integrate_ecr', url: 'https://github.com/santhoshchanda/helloworld.git'
       }
     }
     stage('Building image') {
