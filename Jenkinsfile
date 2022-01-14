@@ -32,7 +32,7 @@ pipeline {
        stage('Deploy Image to ECR') {
       steps{
          script {
-            docker.withRegistry( "https://" + ecrregistry ) {
+            docker.withRegistry( "https://" + ecrregistry, ecrregistryCredential ) {
             dockerImage.push()
           }
 	      }
