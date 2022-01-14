@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'dockerhub'
     dockerImage = ''
     ecrregistry=420407463971.dkr.ecr.us-east-2.amazonaws.com/helloworld
-    ecrregistryCredential='aj_user"
+    ecrregistryCredential='aj_user
   }
   agent any
   stages {
