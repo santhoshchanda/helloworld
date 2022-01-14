@@ -3,12 +3,14 @@ pipeline {
     registry = "santhoshchanda/helloworld"
     registryCredential = 'dockerhub'
     dockerImage = ''
+    ecrregistry=420407463971.dkr.ecr.us-east-2.amazonaws.com/helloworld
+    ecrregistryCredential='aj_user"
   }
   agent any
   stages {
     stage('Cloning Git') {
       steps {
-        git branch: 'main', url: 'https://github.com/santhoshchanda/helloworld.git'
+        git 'git@github.com:santhoshchanda/helloworld.git'
       }
     }
     stage('Building image') {
@@ -27,5 +29,15 @@ pipeline {
 	      }
       }
     }
+       stage('Deploy Image to ECR') {
+      steps{
+         script {
+            docker.withRegistry( "https://" + ecrregistry, "ecr:eu-central-1:" + ecrregistryCredential ) {
+            dockerImage.push()
+          }
+	      }
+      }
+    } 
   }
 }
+
