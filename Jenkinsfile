@@ -3,7 +3,7 @@ pipeline {
     registry = "santhoshchanda/helloworld"
     registryCredential = 'dockerhub'
     dockerImage = ''
-    ecrregistry= '420407463971.dkr.ecr.us-east-2.amazonaws.com/helloworld'
+    ecrregistry= 'public.ecr.aws/a6j1m8o6/helloworldpub'
     ecrregistryCredential= 'aj_user'
   }
   agent any
@@ -32,7 +32,7 @@ pipeline {
        stage('Deploy Image to ECR') {
       steps{
          script {
-            docker.withRegistry( "https://" + ecrregistry, ecrregistryCredential ) {
+            docker.withRegistry( "https://" + ecrregistry ) {
             dockerImage.push()
           }
 	      }
