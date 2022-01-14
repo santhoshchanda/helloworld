@@ -3,7 +3,7 @@ pipeline {
     registry = "santhoshchanda/helloworld"
     registryCredential = 'dockerhub'
     dockerImage = ''
-    ecrregistry=420407463971.dkr.ecr.us-east-2.amazonaws.com/helloworld
+    ecrregistry= '420407463971.dkr.ecr.us-east-2.amazonaws.com/helloworld'
     ecrregistryCredential= 'aj_user'
   }
   agent any
