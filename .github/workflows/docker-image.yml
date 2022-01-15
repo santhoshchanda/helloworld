@@ -1,0 +1,53 @@
+name: Build Container Image and Push to ECR
+
+on:
+  push:
+    branches: [ dev ]
+env:
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
+      with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
+    - name: Self sast-scan
+      uses: AppThreat/sast-scan-action@v1.0.0
+      with:
+          output: reports
+          type: python
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+      run: |
+          # Build a docker container and
+          # push it to ECR
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    - name: Terraform Init
+      run: terraform init
+    - name: Terraform Format
+      run: terraform fmt -check
+    - name: Terraform Plan
+      run: terraform plan
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
