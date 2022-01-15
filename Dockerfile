@@ -1,4 +1,3 @@
-FROM ubuntu
-RUN apt-get update && apt-get install -y python
-ADD helloworld.py /home/helloworld.py
-CMD ["python", "./home/helloworld.py"]
+FROM tiangolo/uwsgi-nginx-flask:python3.8
+
+COPY ./app /app
