@@ -1,5 +1,5 @@
 variable "region" {
-  default     = "us-east-1"
+  default     = "us-east-"
   description = "AWS region"
 }
 
@@ -10,7 +10,7 @@ provider "aws" {
 data "aws_availability_zones" "available" {}
 
 locals {
-  cluster_name = "santoshchanda-${random_string.suffix.result}"
+  cluster_name = "helloworld-${random_string.suffix.result}"
 }
 
 resource "random_string" "suffix" {
